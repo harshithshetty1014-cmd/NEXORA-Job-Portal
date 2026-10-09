@@ -1,44 +1,48 @@
-# [Project name]
+# NEXORA — The Next-Gen Job Portal
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+NEXORA is a career marketplace where applicants discover and track roles while recruiters publish jobs and review candidates.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/api-server run dev` — run the Express API
+- `pnpm --filter @workspace/nexora run dev` — run the React/Vite app
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- Required secrets: `MONGODB_URI`, `SESSION_SECRET`
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
 - API: Express 5
-- DB: PostgreSQL + Drizzle ORM
+- DB: MongoDB Atlas + Mongoose
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/nexora/` — frontend app
+- `artifacts/api-server/` — shared Express API and MongoDB models
+- `lib/api-spec/openapi.yaml` — API source of truth
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- API sessions use an HTTP-only cookie; the user explicitly requested JWT/bcrypt authentication.
+- MongoDB is required for account and job persistence; absent or unreachable Atlas is reported as a service-unavailable state, never replaced with fake data.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Applicants can find jobs, apply, save listings, and track application status. Recruiters can manage a company profile and their jobs, then review and update applicants.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+The user specified MongoDB Atlas, JWT/bcrypt authentication, and a premium motion-rich NEXORA career portal.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Regenerate API hooks and schemas after changes to the OpenAPI file.
+- Job listings with existing applications cannot be deleted; close them instead to preserve candidate records.
 
 ## Pointers
 

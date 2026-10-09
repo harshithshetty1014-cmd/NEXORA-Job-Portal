@@ -80,6 +80,8 @@ async function buildAll() {
       "leveldown",
       "miniflare",
       "mysql2",
+      "mongoose",
+      "mongodb",
       "newrelic",
       "odbc",
       "piscina",
