@@ -1,0 +1,265 @@
+Build a complete, premium, motion-rich MERN stack web application called **NEXORA — The Next-Gen Job Portal**.
+
+**IMPORTANT:** This is for a college Backend Development Hackathon tomorrow. Prioritize a working end-to-end application with real CRUD operations, REST APIs, MongoDB persistence and authentication. Do not build only a static UI or a frontend with fake buttons.
+
+## 1. TECH STACK
+
+* Frontend: React.js with Vite
+* Styling: Tailwind CSS or clean modern CSS
+* Animations: Framer Motion (Motion for React)
+* Backend: Node.js and Express.js
+* Database: MongoDB Atlas using Mongoose
+* Authentication: JWT with bcrypt password hashing
+* API communication: Axios or Fetch
+* Icons: Lucide React
+* Charts: Recharts if needed
+
+Keep the frontend and backend logically separated. Use environment variables for secrets and database credentials.
+
+## 2. DESIGN AND VISUAL IDENTITY
+
+Create a visually distinctive, futuristic career platform inspired by premium SaaS products.
+
+Brand name: NEXORA
+Tagline: "Your next opportunity starts here."
+
+Visual style:
+
+* Deep midnight navy background with violet and electric-blue gradients.
+* Clean white surfaces or subtle translucent panels where appropriate.
+* Premium typography, spacious layouts and strong visual hierarchy.
+* Soft glass effects, fine borders, ambient gradient lighting and subtle shadows.
+* Distinctive company logos or tasteful initials-based logo placeholders.
+* Fully responsive on desktop, tablet and mobile.
+* Do not copy LinkedIn's layout or use a generic admin dashboard template.
+
+## 3. MOTION AND INTERACTIONS
+
+Implement meaningful, smooth animations:
+
+* Animated hero heading with staggered word reveals.
+* Floating job preview cards in the landing-page hero.
+* Soft gradient movement in the background.
+* Scroll-triggered reveal animations for sections.
+* Smooth page transitions.
+* Staggered entrance animations for job cards.
+* Subtle hover lift and animated borders on cards.
+* Animated counters for dashboard statistics.
+* Smooth modal and dropdown transitions.
+* Animated loading skeletons and toast notifications.
+* Reduced-motion accessibility support.
+
+Animations must remain smooth and must not prevent users from clicking, typing or submitting forms.
+
+## 4. PAGES
+
+A. Landing page
+
+* Animated hero section with headline, description and prominent "Explore Jobs" and "Hire Talent" buttons.
+* Functional job search input.
+* Featured jobs section populated from the backend.
+* Popular categories and hiring companies.
+* "How it works" section for applicants and recruiters.
+* Statistics loaded from the API where practical.
+* Responsive footer with navigation.
+
+B. Job discovery page
+
+* Search jobs by title, skills or company.
+* Filter by location, job type, experience level and salary range.
+* Sort by newest.
+* Job cards showing company, role, location, type, salary, skills and posted date.
+* Job details page with description, requirements and an Apply button.
+* Pagination or a Load More button.
+* Loading, empty and error states.
+
+C. Authentication
+
+* Registration and login pages.
+* Account roles: Applicant and Recruiter.
+* Validate inputs on the client and server.
+* Hash passwords using bcrypt.
+* Store authentication securely. Prefer HTTP-only cookies where supported, with appropriate security settings and CORS configuration.
+* Protect private routes.
+* Never return password hashes or secret values in API responses.
+
+D. Applicant dashboard
+
+* Profile management.
+* Saved jobs.
+* Applied jobs and current status.
+* Application timeline or Kanban-style tracker.
+* Application details and timestamps.
+* Withdraw application if it is still eligible for withdrawal.
+* Dashboard statistics calculated from actual application records.
+
+E. Recruiter dashboard
+
+* Create a company profile.
+* Create, view, edit and delete job listings owned by the recruiter.
+* View applicants for their jobs.
+* Review applicant profiles and submitted resumes or resume links.
+* Update application status to Reviewing, Shortlisted, Interview, Offered or Rejected.
+* Display real job and application statistics.
+* Confirm before destructive actions.
+
+F. Admin-ready structure
+
+* Keep authorization logic extensible for an Admin role, but prioritize working Applicant and Recruiter workflows first.
+* Never let an ordinary applicant or recruiter access unauthorized records.
+
+## 5. MONGODB DATA MODELS
+
+Create Mongoose models with validation and timestamps.
+
+User:
+
+* name
+* email (unique)
+* passwordHash
+* role (Applicant or Recruiter)
+* skills
+* location
+* resumeUrl (optional)
+* companyId (optional)
+
+Company:
+
+* name
+* description
+* website
+* location
+* logoUrl (optional)
+* recruiterId
+
+Job:
+
+* title
+* companyId
+* recruiterId
+* description
+* requirements
+* skills
+* location
+* jobType
+* experienceLevel
+* salaryMin
+* salaryMax
+* status (Open or Closed)
+* createdAt
+
+Application:
+
+* jobId
+* applicantId
+* resumeUrl (optional)
+* coverLetter (optional)
+* status
+* appliedAt
+* updatedAt
+
+Add appropriate references, validation, useful indexes and a unique constraint to prevent the same applicant applying to the same job more than once.
+
+## 6. REQUIRED REST APIs
+
+Authentication:
+
+* POST /api/auth/register
+* POST /api/auth/login
+* POST /api/auth/logout
+* GET /api/auth/me
+
+Jobs:
+
+* GET /api/jobs
+* GET /api/jobs/:id
+* POST /api/jobs
+* PUT /api/jobs/:id
+* DELETE /api/jobs/:id
+
+Companies:
+
+* GET /api/companies
+* GET /api/companies/:id
+* POST /api/companies
+* PUT /api/companies/:id
+
+Applications:
+
+* POST /api/applications
+* GET /api/applications/me
+* GET /api/jobs/:id/applications
+* PATCH /api/applications/:id/status
+* PATCH /api/applications/:id/withdraw
+
+Implement proper authentication and role-based authorization on protected routes. Recruiters must only manage their own jobs and applications for those jobs. Applicants must only view or manage their own applications.
+
+Use appropriate HTTP status codes, validation, centralized error handling and consistent JSON response formats. Add pagination and filters to the job listing API.
+
+## 7. BACKEND QUALITY
+
+* Use express.json(), organized routes, controllers, middleware and Mongoose models.
+* Validate MongoDB ObjectIds and request bodies.
+* Handle missing records, duplicate applications, invalid input and database connection failures.
+* Add helmet, reasonable rate limiting, secure CORS configuration and environment-based settings.
+* Never hardcode credentials.
+* Provide a .env.example file without real secrets.
+* Include a health-check endpoint: GET /api/health.
+* Include useful backend logs without exposing passwords or tokens.
+
+## 8. FUNCTIONALITY REQUIREMENTS
+
+Every visible button must work.
+
+* Registration must create a database record.
+* Login must authenticate an existing user.
+* Recruiters must be able to create, edit and delete jobs.
+* Job listings must load from MongoDB through Express APIs.
+* Applicants must be able to apply for jobs.
+* Applications must persist in MongoDB after page refresh.
+* Recruiters must be able to view their applicants and update application statuses.
+* Applicants must see the updated statuses.
+* Search and filters must affect actual results.
+* Protect against duplicate applications and unauthorized access.
+* Show success/error messages and form validation.
+* If MongoDB is not configured, clearly explain how to configure it rather than pretending persistence works.
+
+## 9. PROJECT STRUCTURE
+
+Create a clean project with:
+
+* client/ for the React + Vite frontend
+* server/ for the Node.js + Express backend
+* server/models/
+* server/routes/
+* server/controllers/
+* server/middleware/
+* server/config/
+* server/.env.example
+* README.md with setup instructions, API documentation and demo steps.
+
+Add a small optional seed script with clearly labeled sample companies and jobs for demonstration. Seed data must not be confused with real user-created records.
+
+## 10. HACKATHON PRESENTATION
+
+Include a professional dashboard that clearly demonstrates:
+
+* Total open jobs.
+* Total applications.
+* Shortlisted candidates.
+* Interviews scheduled.
+* Job listings and application status distribution.
+
+Use genuine database-backed statistics wherever possible.
+
+Make the interface look exceptional, but prioritize a reliable working demo over unnecessary features.
+
+## 11. BUILD AND TEST
+
+First generate the complete project structure and working core flows. Install the required dependencies, run the app and fix build errors.
+
+Test registration, login, recruiter job CRUD, job search, applying for a job, duplicate-application prevention, recruiter status updates, applicant status tracking and authorization.
+
+Provide clear instructions for configuring MongoDB Atlas, starting the frontend and backend, and testing the app with separate Applicant and Recruiter accounts.
+
+Do not stop after generating the landing page. Finish the working end-to-end MVP before adding optional features.
